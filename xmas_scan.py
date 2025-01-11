@@ -16,15 +16,15 @@ def _scan(_ip, _prt, _wait, _time, abort_event):
         # check response
         if response is None:
             # connection timeout    
-            print(f"[{_ip}:{_prt}]\t Timeout")
+            print(f"[{_ip}:{_prt}]\t Open (possible-timeout)")
             _ports.remove(int(_prt))
         
         # if a response was captured
         else:
             if response.haslayer(TCP):
-                if response[TCP].flags & 0x02:
-                    # if syn bit set
-                    print(f"[{_ip}:{_prt}]\t Open!")
+                if response[TCP].flags & 0x04:
+                    # RST received
+                    print(f"[{_ip}:{_prt}]\t Closed!")
                 else:
                     # if not...
                     print(f"[{_ip}:{_prt}]\t Closed/filtered")
